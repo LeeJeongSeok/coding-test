@@ -1,13 +1,17 @@
 package jeongseok.programmers.lv1;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NumberPair {
 
 	public String solution(String X, String Y) {
 		HashMap<Character, Integer> xMap = new HashMap<>();
 		HashMap<Character, Integer> yMap = new HashMap<>();
-		StringBuilder sb = new StringBuilder();
+		List<String> list = new ArrayList<>();
 
 		for (int i = 0; i < X.length(); i++) {
 			xMap.put(X.charAt(i), xMap.getOrDefault(X.charAt(i), 0) + 1);
@@ -19,33 +23,27 @@ public class NumberPair {
 
 		// 빈도수가 2이상인 문자만 찾아서 숫자짝궁을 만들어준다.
 		for (Character c : yMap.keySet()) {
-			if (xMap.containsKey(c)) {
-				int count = (xMap.get(c) + yMap.get(c)) / 2;
+			if (!xMap.containsKey(c)) {
+				continue;
+			}
 
-				xMap.put(c, xMap.get(c) % 2);
-				yMap.put(c, yMap.get(c) % 2);
-
-				sb.append(String.valueOf(c).repeat(count));
+			int length = Math.min(xMap.get(c), yMap.get(c));
+			for (int i = 0; i < length; i++) {
+				list.add(String.valueOf(c));
 			}
 		}
 
-		// 짝궁을 만들지 못하는 경우
-		if (sb.length() == 0) {
+		String result = list.stream()
+			.sorted(Collections.reverseOrder())
+			.collect(Collectors.joining());
+
+		if (result.isEmpty()) {
 			return "-1";
-		}
-
-		boolean flag = false;
-		// 짝궁이 0인 경우
-		for (int i = 0; i < sb.length(); i++) {
-			flag = sb.charAt(i) == '0';
-		}
-
-		if (flag) {
+		} else if (result.replaceAll("0", "").isEmpty()) {
 			return "0";
+		} else {
+			return result;
 		}
-
-		// 숫자짝궁중 가장 큰 수를 추출한다.
-		return sb.reverse().toString();
 	}
 
 	public static void main(String[] args) {
