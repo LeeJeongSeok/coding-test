@@ -1,6 +1,7 @@
 package jeongseok.programmers.lv1;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.*;
 
 public class PersonalityTypeTester {
@@ -33,41 +34,25 @@ public class PersonalityTypeTester {
 			}
 		}
 
-		if (Objects.equals(map.get("R"), map.get("T"))) {
-			answer.add("R");
-		} else if (map.get("R") > map.get("T")) {
-			answer.add("R");
-		} else {
-			answer.add("T");
-		}
+		compareAndAdd(answer, map, "R", "T");
+		compareAndAdd(answer, map, "C", "F");
+		compareAndAdd(answer, map, "J", "M");
+		compareAndAdd(answer, map, "A", "N");
 
-		if (Objects.equals(map.get("C"), map.get("F"))) {
-			answer.add("C");
-		} else if (map.get("C") > map.get("F")) {
-			answer.add("C");
-		} else {
-			answer.add("F");
-		}
-
-		if (Objects.equals(map.get("J"), map.get("M"))) {
-			answer.add("J");
-		} else if (map.get("J") > map.get("M")) {
-			answer.add("J");
-		} else {
-			answer.add("M");
-		}
-
-		if (Objects.equals(map.get("A"), map.get("N"))) {
-			answer.add("A");
-		} else if (map.get("A") > map.get("N")) {
-			answer.add("A");
-		} else {
-			answer.add("N");
-		}
 
 		String result = answer.stream().collect(Collectors.joining());
 
 		return result;
+	}
+
+	private static void compareAndAdd(List<String> answer, Map<String, Integer> map, String key1, String key2) {
+		if (Objects.equals(map.get(key1), map.get(key2))) {
+			answer.add(key1);
+		} else if (map.get(key1) > map.get(key2)) {
+			answer.add(key1);
+		} else {
+			answer.add(key2);
+		}
 	}
 
 	public static void main(String[] args) {
