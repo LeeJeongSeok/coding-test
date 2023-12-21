@@ -7,11 +7,13 @@ public class PersonalityTypeTester {
 
 	public String solution(String[] survey, int[] choices) {
 
-		HashMap<String, Integer> first = new HashMap<String, Integer>();
-		HashMap<String, Integer> second = new HashMap<String, Integer>();
-		HashMap<String, Integer> third = new HashMap<String, Integer>();
-		HashMap<String, Integer> forth = new HashMap<String, Integer>();
+		HashMap<String, Integer> first = new HashMap<>();
+		HashMap<String, Integer> second = new HashMap<>();
+		HashMap<String, Integer> third = new HashMap<>();
+		HashMap<String, Integer> forth = new HashMap<>();
+
 		List<String> list = new ArrayList<>();
+		int[] score = new int[]{0, 3, 2, 1, 0, 1, 2, 3};
 
 		first.put("R", 0);
 		first.put("T", 0);
@@ -25,7 +27,6 @@ public class PersonalityTypeTester {
 		forth.put("A", 0);
 		forth.put("N", 0);
 
-		int[] score = new int[]{0, 3, 2, 1, 0, 1, 2, 3};
 
 		for (int i = 0; i < choices.length; i++) {
 			String[] ans = survey[i].split("");
@@ -71,45 +72,81 @@ public class PersonalityTypeTester {
 		}
 
 
-		Integer firstMinValue = Collections.max(first.values());
-		Integer secondMinValue = Collections.max(second.values());
-		Integer thirdMinValue = Collections.max(third.values());
-		Integer forthMinValue = Collections.max(forth.values());
+		Integer firstMaxValue = Collections.max(first.values());
+		Integer secondMaxValue = Collections.max(second.values());
+		Integer thirdMaxValue = Collections.max(third.values());
+		Integer forthMaxValue = Collections.max(forth.values());
 
+
+		List<String> firstTemp = new ArrayList<>();
 		for (String key : first.keySet()) {
-			if (first.get(key).equals(firstMinValue)) {
-				list.add(key);
-				break;
+			if (first.get(key).equals(firstMaxValue)) {
+				firstTemp.add(key);
 			}
 		}
 
+		// value 값이 동일한 경우 사전순으로 정렬했을 때 가장 앞에 오는 문자가 list에 더해져야한다.
+		if (firstTemp.size() >= 2) {
+			Collections.sort(firstTemp);
+			list.add(firstTemp.get(0));
+		} else {
+			list.add(firstTemp.get(0));
+		}
+
+		List<String> secondTemp = new ArrayList<>();
 		for (String key : second.keySet()) {
-			if (second.get(key).equals(secondMinValue)) {
-				list.add(key);
-				break;
+			if (second.get(key).equals(secondMaxValue)) {
+				secondTemp.add(key);
 			}
 		}
 
+		if (secondTemp.size() >= 2) {
+			Collections.sort(secondTemp);
+			list.add(secondTemp.get(0));
+		} else {
+			list.add(secondTemp.get(0));
+		}
+
+
+		List<String> thirdTemp = new ArrayList<>();
 		for (String key : third.keySet()) {
-			if (third.get(key).equals(thirdMinValue)) {
-				list.add(key);
-				break;
+			if (third.get(key).equals(thirdMaxValue)) {
+				thirdTemp.add(key);
 			}
 		}
 
+		if (thirdTemp.size() >= 2) {
+			Collections.sort(thirdTemp);
+			list.add(thirdTemp.get(0));
+		} else {
+			list.add(thirdTemp.get(0));
+		}
+
+		List<String> forthTemp = new ArrayList<>();
 		for (String key : forth.keySet()) {
-			if (forth.get(key).equals(forthMinValue)) {
-				list.add(key);
-				break;
+			if (forth.get(key).equals(forthMaxValue)) {
+				forthTemp.add(key);
 			}
 		}
 
-		return String.join("", list);
+		if (forthTemp.size() >= 2) {
+			Collections.sort(forthTemp);
+			list.add(forthTemp.get(0));
+		} else {
+			list.add(forthTemp.get(0));
+		}
+
+
+		String answer = list.stream()
+			.collect(Collectors.joining());
+
+		return answer;
 	}
 
 	public static void main(String[] args) {
 //		new PersonalityTypeTester().solution(new String[]{"AN", "CF", "MJ", "RT", "NA"}, new int[]{5, 3, 2, 7, 5});
-		new PersonalityTypeTester().solution(new String[]{"TR", "RT", "TR"}, new int[]{7, 1, 3});
+//		new PersonalityTypeTester().solution(new String[]{"TR", "RT", "TR"}, new int[]{7, 1, 3});
+		new PersonalityTypeTester().solution(new String[]{"RT", "TR", "FC", "CF", "MJ", "JM", "AN", "NA"}, new int[]{1});
 	}
 
 }
