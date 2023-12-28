@@ -1,6 +1,8 @@
 package jeongseok.programmers.lv1;
 
 import java.util.*;
+import java.util.Map.Entry;
+
 public class IncompleteRunner {
 
 	public String solution(String[] participant, String[] completion) {
@@ -16,9 +18,12 @@ public class IncompleteRunner {
 			map.put(completion[i], map.get(completion[i]) - 1);
 		}
 
-		for (String key : map.keySet()) {
-			if (map.get(key) == 1) {
-				answer = key;
+		/**
+		 * map.keySet() 방식보다 entrySet 방식으로 value 값을 가져오는게 효율성 측면에서 더 좋다.
+		 */
+		for (Entry<String, Integer> entry : map.entrySet()) {
+			if (entry.getValue() == 1) {
+				answer = entry.getKey();
 			}
 		}
 
