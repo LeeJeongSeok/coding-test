@@ -2,28 +2,32 @@ package jeongseok.programmers.lv2;
 
 import java.util.*;
 
-class Report implements Comparable<Report> {
+class Report {
 
 	String name;
-	String start;
-	String playtime;
+	int start;
+	int playtime;
 
 	public Report(String name, String start, String playtime) {
 		this.name = name;
-		this.start = start;
-		this.playtime = playtime;
+		this.start = convertToMinute(start);
+		this.playtime = Integer.parseInt(playtime);
 	}
 
-	@Override
-	public int compareTo(Report report) {
-		return this.start.compareTo(report.start);
+	private int convertToMinute(String start) {
+		String[] split = start.split(":");
+		int hour = Integer.parseInt(split[0]);
+		int minute = Integer.parseInt(split[1]);
+
+		return hour * 60 + minute;
 	}
 }
 
 public class AssignmentProgress {
-	PriorityQueue<Report> pq = new PriorityQueue<>();
+	PriorityQueue<Report> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o.start));
 	Stack<Report> stack = new Stack<>();
 	ArrayList<String> result = new ArrayList<>();
+	int currentTime = 0;
 
 	public String[] solution(String[][] plans) {
 
@@ -31,33 +35,49 @@ public class AssignmentProgress {
 			pq.add(new Report(plan[0], plan[1], plan[2]));
 		}
 
-		// 시작
-		// pq에 가장 맨 앞에 있는 과제를 뽑는다.
-		// 바로 뒤에 있는 과제와 시간비교를 했을 때 종료가 불가능하다면 스택으로 저장
+		currentTime = pq.peek().start;
+
 		while (!pq.isEmpty()) {
 			Report cur = pq.poll();
+			Report next = pq.peek();
 
-			String finishedTime = calculateFinishedTime(cur.start, cur.playtime);
+			// 마지막 과제인경우
+			if (next == null) {
+				result.add(cur.name);
+				break;
+			}
 
-			if (!pq.isEmpty()) {
-				Report next = pq.peek();
+			// 현재시간과 현재 시작해야하는 과제의 종료시간이 그 다음 과제의 시작시간과 동일한 경우 완료처리 후, 현재 시간을 다음 과제 시작시간으로 갱신
+			if (currentTime + cur.playtime == next.start) {
+				result.add(cur.name);
+				currentTime = next.start;
+			} else if (currentTime + cur.playtime < next.start) { // 현재시간과 현재 시작해야하는 과제의 종료시간이 그 다음 과제의 시작시간보다 일찍 끝나는 경우 일단 현재 과제는 완료처리한다.
+				result.add(cur.name);
 
-				if (finishedTime.compareTo(next.start) > 0) {
-					stack.push(cur);
-					continue;
+				// 남아 있는 과제가 없는 경우
+				if (stack.isEmpty()) {
+					currentTime = next.start;
 				} else {
-					// 진행중인 과제가 끝났을 때, 잠시 멈춘 과제를 이어서 할 수 있다면 진행함
-					if (!stack.isEmpty()) {
-						Report remind = stack.peek();
+					currentTime += cur.playtime;
+				}
 
-						if (finishedTime.compareTo(remind.start) <= 0) {
-							Report deletedRemind = stack.pop();
-							result.add(deletedRemind.name);
-						}
+				while(!stack.isEmpty() && currentTime != next.start){  // 공백 시간내에 여러 remainWork 를 할 수 있음
+					Report remind = stack.pop();
+
+					if(currentTime + remind.playtime <= next.start){  // 공백 시간내에 remainWork 를 끝낸 경우
+						result.add(remind.name);
+						currentTime += remind.playtime;
+					}else{                                                  // 공백 시간내에 remainWork 를 끝내지 못한 경우
+						remind.playtime -= next.start - currentTime;
+						currentTime = next.start;
+						stack.push(remind);
 					}
 				}
+			} else {
+				cur.playtime -= next.start - currentTime;
+				currentTime = next.start;
+				stack.push(cur);
 			}
-			result.add(cur.name);
 		}
 
 		// 중간에 멈춘 과제들을 마저 진행한다.
@@ -67,24 +87,6 @@ public class AssignmentProgress {
 		}
 
 		return result.stream().toArray(String[]::new);
-	}
-
-	private static String calculateFinishedTime(String start, String playtime) {
-		// ":"을 기준으로 시간과 분 분리
-		String[] parts = start.split(":");
-		int hours = Integer.parseInt(parts[0]);
-		int minutes = Integer.parseInt(parts[1]);
-
-		// 분을 더한 후 시간 계산
-		int totalMinutes = hours * 60 + minutes + Integer.parseInt(playtime);
-		int newHours = totalMinutes / 60;
-		int newMinutes = totalMinutes % 60;
-
-		// 24시간 형식으로 변환
-		newHours %= 24;
-
-		// 결과 출력
-		return String.format("%02d:%02d", newHours, newMinutes);
 	}
 
 	public static void main(String[] args) {
