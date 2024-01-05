@@ -45,6 +45,16 @@ public class AssignmentProgress {
 				if (finishedTime.compareTo(next.start) > 0) {
 					stack.push(cur);
 					continue;
+				} else {
+					// 진행중인 과제가 끝났을 때, 잠시 멈춘 과제를 이어서 할 수 있다면 진행함
+					if (!stack.isEmpty()) {
+						Report remind = stack.peek();
+
+						if (finishedTime.compareTo(remind.start) <= 0) {
+							Report deletedRemind = stack.pop();
+							result.add(deletedRemind.name);
+						}
+					}
 				}
 			}
 			result.add(cur.name);
