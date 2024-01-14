@@ -57,6 +57,7 @@ public class AssignmentProgress {
 				// 남아 있는 과제가 없는 경우
 				if (stack.isEmpty()) {
 					currentTime = next.start;
+					break;
 				} else {
 					currentTime += cur.playtime;
 				}
@@ -69,7 +70,7 @@ public class AssignmentProgress {
 						currentTime += remind.playtime;
 					}else{                                                  // 공백 시간내에 remainWork 를 끝내지 못한 경우
 						remind.playtime -= next.start - currentTime;
-						currentTime = next.start;
+						currentTime += remind.playtime;
 						stack.push(remind);
 					}
 				}
@@ -90,7 +91,8 @@ public class AssignmentProgress {
 	}
 
 	public static void main(String[] args) {
-		new AssignmentProgress().solution(new String[][]{{"korean", "11:40", "30"}, {"english", "12:10", "20"}, {"math", "12:30", "40"}});
-		new AssignmentProgress().solution(new String[][]{{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "14:00", "30"}, {"computer", "12:30", "100"}});
+//		new AssignmentProgress().solution(new String[][]{{"korean", "11:40", "30"}, {"english", "12:10", "20"}, {"math", "12:30", "40"}});
+//		new AssignmentProgress().solution(new String[][]{{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "14:00", "30"}, {"computer", "12:30", "100"}});
+		new AssignmentProgress().solution(new String[][]{{"A", "11:50", "30"}, {"B", "13:00", "20"}, {"C", "13:10", "30"}});
 	}
 }
