@@ -5,21 +5,20 @@ public class MagicElevator {
 	public int solution(int storey) {
 		int answer = 0;
 
-		int[] arr = new int[String.valueOf(storey).length()];
-
-		for (int i = arr.length - 1; i >= 0; i--) {
-			arr[i] = storey % 10;
+		while (storey > 0) {
+			int number = storey % 10;
 			storey /= 10;
-		}
 
-		for (int i = arr.length - 1; i >= 0; i--) {
-			if (arr[i] < 5) {
-				answer += arr[i];
-				arr[i] = 0;
+			if (number < 5) {
+				answer += number;
+			} else if (number > 5) {
+				answer += 10 - number;
+				storey++;
 			} else {
-				arr[i - 1]++;
-				answer += 10 - arr[i];
-				arr[i] = 0;
+				answer += 5;
+				if (storey % 10 >= 5) {
+					storey++;
+				}
 			}
 		}
 
