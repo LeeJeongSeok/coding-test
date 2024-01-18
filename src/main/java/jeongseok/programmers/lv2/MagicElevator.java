@@ -14,16 +14,11 @@ public class MagicElevator {
 
 		for (int i = arr.length - 1; i >= 0; i--) {
 			if (arr[i] < 5) {
-				while (arr[i] % 10 != 0) {
-					answer++;
-					arr[i]--;
-				}
+				answer += arr[i];
+				arr[i] = 0;
 			} else {
-				while (arr[i] % 10 != 0) {
-					answer++;
-					arr[i]++;
-				}
 				arr[i - 1]++;
+				answer += 10 - arr[i];
 				arr[i] = 0;
 			}
 		}
