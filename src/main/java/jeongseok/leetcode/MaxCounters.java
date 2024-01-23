@@ -12,29 +12,25 @@ public class MaxCounters {
 		// Implement your solution here
 		int[] answer = new int[N];
 		int max = 0;
-		TreeMap<Integer, Integer> map = new TreeMap<>();
-
-		// 맵 초기화
-		for (int i = 1; i <= N; i++) {
-			map.put(i, 0);
-		}
+		int temp_max = 0;
 
 		for (int i = 0; i < A.length; i++) {
 			if (A[i] > N) {
-				int finalMax = max;
-				map.replaceAll((k, v) -> finalMax);
+				max = temp_max;
 			} else {
-				map.put(A[i], map.get(A[i]) + 1);
-				max = Math.max(max, map.get(A[i]));
+				if (answer[A[i] - 1] < max) {
+					answer[A[i] - 1] = max;
+				}
+				answer[A[i] - 1]++;
+				temp_max = Math.max(temp_max, answer[A[i] - 1]);
 			}
 		}
 
-		for (Integer i : map.keySet()) {
-			answer[i - 1] = map.get(i);
+		for (int i = 0; i < answer.length; i++) {
+			if (answer[i] < max) {
+				answer[i] = max;
+			}
 		}
-
-
-
 		return answer;
 	}
 
