@@ -2,23 +2,26 @@ package jeongseok.leetcode;
 
 public class PermCheck {
 
+	// 1 ~ N까지의 수열이 전부다 있다고 가정할 떄의 합과, A의 모든 원소의 합을 구했을 때, 서로 값이 다르다면 A는 수열이 아니다.
 	public int solution(int[] A) {
 
 		int max = getMaxValue(A);
+		int sum1 = 0;
+		int sum2 = 0;
 
-		int[] answer = new int[max + 1];
+		for (int i = 1; i <= max; i++) {
+			sum1 += i;
+		}
 
 		for (int i = 0; i < A.length; i++) {
-			answer[A[i]] = 1;
+			sum2 += A[i];
 		}
 
-		for (int i = 1; i < answer.length; i++) {
-			if (answer[i] == 0) {
-				return 0;
-			}
+		if (sum1 == sum2) {
+			return 1;
 		}
 
-		return 1;
+		return 0;
 	}
 
 	private int getMaxValue(int[] arr) {
