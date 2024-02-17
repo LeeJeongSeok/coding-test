@@ -6,37 +6,21 @@ public class ParcelDeliveryAndCollection {
 
 	public long solution(int cap, int n, int[] deliveries, int[] pickups) {
 		long answer = 0;
-		Stack<int[]> delivery = new Stack<>();
-		Stack<int[]> pickup = new Stack<>();
+		//트럭 하나로 모든 배달과 수거를 마치고 물류창고까지 돌아올 수 있는 최소 이동 거리를 return
 
-		for (int i = 0; i < n; i++) {
-			delivery.add(new int[]{i + 1, deliveries[i]});
-			pickup.add(new int[]{i + 1, pickups[i]});
-		}
+		int d = 0;
+		int p = 0;
+		for(int i=n-1; i>=0; i--){
+			d -= deliveries[i];
+			p -= pickups[i];
 
-		while (!delivery.isEmpty() && !pickup.isEmpty()) {
-			int[] d = delivery.peek();
-			int[] p = pickup.peek();
-
-			//배달 택배와, 수거 택배 중 더 먼 곳인 집을 하나 가져온다.
-			if (d[1] > p[1]) {
-				answer += d[0] * 2;
-			} else {
-				answer += p[0] * 2;
-			}
-
-
-			int temp = cap;
-			while (!delivery.isEmpty() || temp == 0) {
-				temp -= d[1];
-				delivery.pop();
-			}
-
-			if (temp + p[1] < cap) {
-				temp += p[1];
-				pickup.pop();
+			while(d < 0 || p < 0){
+				d += cap;
+				p += cap;
+				answer += (i+1)*2;
 			}
 		}
+
 		return answer;
 	}
 

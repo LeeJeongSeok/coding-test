@@ -10,8 +10,10 @@ public class CountDiv {
 	public int solution(int A, int B, int K) {
 		// Implement your solution here
 		int count = 0;
+		int sum = A;
 
-		for (int i = A; i <= B; i += K) {
+		while (sum < B) {
+			sum += K;
 			count++;
 		}
 

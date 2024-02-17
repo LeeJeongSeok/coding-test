@@ -18,11 +18,13 @@ public class MaxCounters {
 			if (A[i] > N) {
 				max = temp_max;
 			} else {
-				if (answer[A[i] - 1] < max) {
-					answer[A[i] - 1] = max;
+				// 배열의 인덱스가 0부터 시작하기 때문이다. 만약 이렇게 작성하기 싫다면 정답 배열의 사이즈를 N + 1로 해줘야함
+				int count = A[i] - 1;
+				if (answer[count] < max) {
+					answer[count] = max;
 				}
-				answer[A[i] - 1]++;
-				temp_max = Math.max(temp_max, answer[A[i] - 1]);
+				answer[count]++;
+				temp_max = Math.max(temp_max, answer[count]);
 			}
 		}
 
