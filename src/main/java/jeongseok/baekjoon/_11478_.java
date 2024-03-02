@@ -5,36 +5,19 @@ import java.util.*;
 
 public class _11478_ {
 
-	static int count;
-	static String S;
-
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		S = br.readLine();
+		String S = br.readLine();
 
-		int left = 0;
-		int right = 0;
+		HashSet<String> set = new HashSet<>();
 
-		while (right != S.length() - 1) {
-			int tempLeft = left;
-			int tempRight = right;
-
-			while (true) {
-
-				if (tempRight == S.length() - 1) {
-					count++;
-					break;
-				}
-
-				count++;
-				tempLeft++;
-				tempRight++;
+		for (int i = 0; i < S.length(); i++) {
+			for (int j = i + 1; j <= S.length(); j++) {
+				set.add(S.substring(i, j)); // endIndex - beginIndex
 			}
-
-			right++;
 		}
 
-		System.out.println(count);
+		System.out.println(set.size());
 	}
 
 }
